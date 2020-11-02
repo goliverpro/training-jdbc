@@ -43,27 +43,31 @@ public class SellerDaoJDBC implements SellerDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			//SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			// SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			st = conn.prepareStatement(
 					"SELECT seller.*,department.Name as DepName " + "FROM seller INNER JOIN department "
 							+ "ON seller.DepartmentId = department.Id WHERE seller.Id = ?");
 			st.setInt(1, id);
 			rs = st.executeQuery();
 			if (rs.next()) {
-				Seller seller = new Seller(rs.getInt("Id"), rs.getString("Name"), rs.getString("Email"),
-						rs.getDate("BirthDate"), rs.getDouble("BaseSalary"),
-						new Department(rs.getInt("DepartmentId"), rs.getString("DepName")));
-				return seller;
+				Seller sel = instantiateSeller(rs);
+				return sel;
 			}
 			return null;
-		} 
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
-		}
-		finally {
+		} finally {
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
 		}
+	}
+
+	private Seller instantiateSeller(ResultSet rs) throws SQLException {
+		Seller seller = new Seller(rs.getInt("Id"), rs.getString("Name"), rs.getString("Email"),
+				rs.getDate("BirthDate"), rs.getDouble("BaseSalary"),
+				new Department(rs.getInt("DepartmentId"), rs.getString("DepName")));
+		return seller;
+
 	}
 
 	@Override
