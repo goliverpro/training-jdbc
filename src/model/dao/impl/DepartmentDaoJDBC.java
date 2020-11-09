@@ -10,6 +10,7 @@ import java.util.List;
 
 import db.DB;
 import db.DbException;
+import db.DbIntegrityException;
 import model.dao.DepartmentDao;
 import model.entities.Department;
 
@@ -66,7 +67,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 			int rows = st.executeUpdate();
 			System.out.println("Rows affected: " + rows);
 		} catch (SQLException e) {
-			e.getStackTrace();
+			throw new DbIntegrityException(e.getMessage());
 		}
 	}
 
@@ -99,10 +100,10 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 	public List<Department> findAll() {
 		Statement st = null;
 		ResultSet rs = null;
-		List<Department> list = new ArrayList<>();
 		try {
 			st = conn.createStatement();
 			rs = st.executeQuery("Select * from department ORDER by Name");
+			List<Department> list = new ArrayList<>();
 			while (rs.next()) {
 				Department dp = new Department(rs.getInt("Id"), rs.getString("Name"));
 				list.add(dp);
