@@ -26,6 +26,10 @@ public class Program2 {
 		Department depa = new Department(null, "Lavandery");
 		dp.insert(depa);
 		System.out.println("Sucessful insert! New department id: " + depa.getId());
+		
+		System.out.println("\n===== Department update Test 4 =====");
+		Department depar = new Department(16, "Kitchen");
+		dp.update(depar);
 	}
 
 }

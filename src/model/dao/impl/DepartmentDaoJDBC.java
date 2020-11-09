@@ -33,22 +33,34 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 				if (rs.next()) {
 					obj.setId(rs.getInt(1));
 				}
+				DB.closeResultSet(rs);
 			}
 		} catch (SQLException e) {
 			e.getStackTrace();
+		}
+		finally {
+			DB.closeStatement(st);
 		}
 
 	}
 
 	@Override
 	public void update(Department obj) {
-		// TODO Auto-generated method stub
-
+		PreparedStatement st = null;
+		try {
+		st = conn.prepareStatement("UPDATE department SET Name = ? WHERE Id = ?");
+		st.setString(1, obj.getName());
+		st.setInt(2, obj.getId());
+		int rows = st.executeUpdate();
+		System.out.println("Rows affected: " + rows);
+		}
+		catch(SQLException e) {
+			e.getStackTrace();
+		}
 	}
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
 
 	}
 
