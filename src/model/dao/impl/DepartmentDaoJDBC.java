@@ -23,7 +23,20 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
 	@Override
 	public void insert(Department obj) {
-		// TODO Auto-generated method stub
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("INSERT INTO department (Name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+			st.setString(1, obj.getName());
+			int rows = st.executeUpdate();
+			if (rows > 0) {
+				ResultSet rs = st.getGeneratedKeys();
+				if (rs.next()) {
+					obj.setId(rs.getInt(1));
+				}
+			}
+		} catch (SQLException e) {
+			e.getStackTrace();
+		}
 
 	}
 
@@ -75,10 +88,6 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 			while (rs.next()) {
 				Department dp = new Department(rs.getInt("Id"), rs.getString("Name"));
 				list.add(dp);
-				/*if (list.get(0) == null) {
-					throw new SQLException("DB empty");
-				}*/
-				
 			}
 			return list;
 		} catch (SQLException e) {
