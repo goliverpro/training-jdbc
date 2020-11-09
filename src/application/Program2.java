@@ -28,8 +28,12 @@ public class Program2 {
 		System.out.println("Sucessful insert! New department id: " + depa.getId());
 		
 		System.out.println("\n===== Department update Test 4 =====");
-		Department depar = new Department(16, "Kitchen");
+		Department depar = new Department(17, "Kitchen");
 		dp.update(depar);
+		
+		System.out.println("\n===== Department delete Test 5 =====");
+		Department depart = new Department(6, null);
+		dp.deleteById(depart.getId());
 	}
 
 }
